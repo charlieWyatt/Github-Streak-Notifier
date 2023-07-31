@@ -1,5 +1,6 @@
 import requests
 from githubConnector import get_streak, has_contributed_today
+import datetime
 from api_keys import PUSHOVER_API_KEY, PUSHOVER_USER_KEY
 
 def notify_phone(message, user = "u1ebamr9d7nzquhxkqvcxfho8wtzgh"):
@@ -31,7 +32,14 @@ def evening_message():
     else:
         notify_phone(f"This is your last chance to save your streak of {get_streak()} days.")
 
-
-morning_message()
-afternoon_message()
-evening_message()
+def control_notifications():
+    if datetime.datetime.now().hour == 8:
+        morning_message()
+    elif datetime.datetime.now().hour == 15:
+        afternoon_message()
+    elif datetime.datetime.now().hour == 19:
+        evening_message()
+    else:
+        # print(datetime.datetime.now().hour)
+        notify_phone("No notifications at this time.")
+    
