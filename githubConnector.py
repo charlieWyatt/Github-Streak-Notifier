@@ -7,16 +7,11 @@ import requests
 def get_contributions(start_date, end_date):
     '''Returns the contributions of a github user in a given time period.'''
     url = 'https://api.github.com/graphql'
-    #json = { 'query' : '{ viewer { contributionsCollection( from: "2023-06-28T23:05:23Z" to: "2023-07-28T23:05:23Z") { contributionCalendar { totalContributions weeks { contributionDays { weekday date contributionCount color } } months { name year firstDay totalWeeks } }}} }' }
     json_input = { 'query' : '{ viewer { contributionsCollection( from: "'+start_date+'" to: "'+end_date+'") { contributionCalendar { totalContributions weeks { contributionDays { weekday date contributionCount color } } months { name year firstDay totalWeeks } }}} }' }
-    #print(json_input)
     api_token = GITHUB_API_KEY
     headers = {'Authorization': 'token %s' % api_token}
 
     r = requests.post(url=url, json=json_input, headers=headers)
-    parsed_json = json.loads(str(r.text))
-    pretty_json = json.dumps(parsed_json, indent=4)
-    #print(pretty_json)
     return r.json()
 
 def get_streak(start_date = (datetime.datetime.now() - relativedelta(years=1)).isoformat(), end_date = (datetime.datetime.now() - relativedelta(days=1)).isoformat()):
@@ -37,10 +32,8 @@ def get_streak(start_date = (datetime.datetime.now() - relativedelta(years=1)).i
                 streak += 1
             else:
                 return streak
+    return '365+' # only grabbing the past year worth of data
             
 def has_contributed_today():
     returned_json = get_contributions(datetime.datetime.now().isoformat(), datetime.datetime.now().isoformat()) # gets just todays data
     return returned_json['data']['viewer']['contributionsCollection']['contributionCalendar']['totalContributions'] > 0
-            
-print(get_streak())
-print(has_contributed_today())

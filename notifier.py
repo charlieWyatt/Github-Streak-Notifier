@@ -40,6 +40,6 @@ def control_notifications():
     elif datetime.datetime.now().hour == 19:
         evening_message()
     else:
-        # print(datetime.datetime.now().hour)
+        # this will only be triggered during testing
         notify_phone("No notifications at this time.")
     
