@@ -33,11 +33,11 @@ def evening_message():
         notify_phone(f"This is your last chance to save your streak of {get_streak()} days.")
 
 def control_notifications():
-    if datetime.datetime.now().hour == 8:
+    if datetime.datetime.now().hour <= 10:
         morning_message()
-    elif datetime.datetime.now().hour == 15:
+    elif datetime.datetime.now().hour <= 16:
         afternoon_message()
-    elif datetime.datetime.now().hour == 19:
+    elif datetime.datetime.now().hour > 16:
         evening_message()
     else:
         # this will only be triggered during testing
